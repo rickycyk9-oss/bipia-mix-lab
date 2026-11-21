@@ -8,7 +8,10 @@
   <title>BIPIA Lab · 中英混合实验工作台</title>
   <link rel="stylesheet" href="styles.css">
   <script type="module" src="app.mjs"></script>
-</head>
+<style>
+.sidebar nav a.ws-open {display:flex;align-items:center;gap:12px;box-sizing:border-box;background:#f1edff;color:#513ca0;border:1px solid #d7cef6;font-weight:650;text-decoration:none;}
+.sidebar nav a.ws-open:hover,.sidebar nav a.ws-open:focus-visible {background:#e6dffd;outline:2px solid #7561d4;outline-offset:-2px;}
+</style></head>
 <body>
   <a class="skip-link" href="#main">跳到主要内容</a>
   <div id="app"><main style="max-width:44rem;margin:10vh auto;padding:1.5rem;font:1rem/1.7 system-ui"><p>BIPIA Lab · Word Studio</p><h1>中英词汇工作台 / Word Studio</h1><p>选择界面语言，打开随机词汇翻译。<br>Choose a language to open the word translation page.</p><p><a href="./translator.html?lang=zh">中文 · 随机词汇翻译</a>　<a href="./translator.html?lang=en" lang="en">English · Word translation</a></p></main></div>
@@ -24,9 +27,17 @@
     const url = './translator.html?lang=' + (english ? 'en' : 'zh');
     const label = english ? 'Word translation' : '随机词汇翻译';
     let a = nav.querySelector('a[href*="translator.html"]');
-    if (!a) { a = document.createElement('a'); a.className = 'nav-item'; nav.appendChild(a); }
+    if (!a) a = document.createElement('a');
+    a.classList.add('nav-item','ws-open');
+    const review = nav.querySelector('[data-view="review"]');
+    if (review && review.nextElementSibling !== a) review.after(a);
+    else if (!a.isConnected) nav.appendChild(a);
+    if (!a.querySelector('.ws-label')) {
+      a.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h12M9 3v2m3 0c-1 4-4 7-8 9m2-6c1 2 3 4 6 6m1 6 4-10h1l4 10m-7-3h5"/></svg><span class="ws-label"></span>';
+    }
     if (a.getAttribute('href') !== url) a.setAttribute('href', url);
-    if (a.textContent !== label) a.textContent = label;
+    const span = a.querySelector('.ws-label');
+    if (span.textContent !== label) span.textContent = label;
   }
   new MutationObserver(sync).observe(root,{childList:true,subtree:true});
   new MutationObserver(sync).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
@@ -35,4 +46,5 @@
 </script>
 </body>
 </html>
+
 
