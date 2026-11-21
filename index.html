@@ -38,6 +38,14 @@
     if (a.getAttribute('href') !== url) a.setAttribute('href', url);
     const span = a.querySelector('.ws-label');
     if (span.textContent !== label) span.textContent = label;
+    let room = nav.querySelector('a[data-study-room]');
+    if (!room) { room=document.createElement('a'); room.dataset.studyRoom='1'; room.className='nav-item ws-open'; }
+    if(a.nextElementSibling!==room) a.after(room);
+    const dest='./study-room.html?lang='+(english?'en':'zh');
+    if(room.getAttribute('href')!==dest) room.setAttribute('href',dest);
+    const title=english?'Study workspace':'实验工作区';
+    if(room.textContent!==title) room.textContent=title;
+
   }
   new MutationObserver(sync).observe(root,{childList:true,subtree:true});
   new MutationObserver(sync).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
@@ -46,5 +54,6 @@
 </script>
 </body>
 </html>
+
 
 
