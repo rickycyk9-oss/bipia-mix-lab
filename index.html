@@ -11,8 +11,28 @@
 </head>
 <body>
   <a class="skip-link" href="#main">跳到主要内容</a>
-  <div id="app"><div class="loading"><span class="loading-symbol">B</span><p>正在打开实验工作台…</p></div></div>
+  <div id="app"><main style="max-width:44rem;margin:10vh auto;padding:1.5rem;font:1rem/1.7 system-ui"><p>BIPIA Lab · Word Studio</p><h1>中英词汇工作台 / Word Studio</h1><p>选择界面语言，打开随机词汇翻译。<br>Choose a language to open the word translation page.</p><p><a href="./translator.html?lang=zh">中文 · 随机词汇翻译</a>　<a href="./translator.html?lang=en" lang="en">English · Word translation</a></p></main></div>
   <div id="toast" role="status" aria-live="polite"></div>
   <dialog id="modal" aria-label="工作台操作"></dialog>
+<script>
+(() => {
+  const root = document.getElementById('app');
+  function sync() {
+    const nav = root.querySelector('.sidebar nav');
+    if (!nav) return;
+    const english = document.documentElement.lang.toLowerCase().startsWith('en');
+    const url = './translator.html?lang=' + (english ? 'en' : 'zh');
+    const label = english ? 'Word translation' : '随机词汇翻译';
+    let a = nav.querySelector('a[href*="translator.html"]');
+    if (!a) { a = document.createElement('a'); a.className = 'nav-item'; nav.appendChild(a); }
+    if (a.getAttribute('href') !== url) a.setAttribute('href', url);
+    if (a.textContent !== label) a.textContent = label;
+  }
+  new MutationObserver(sync).observe(root,{childList:true,subtree:true});
+  new MutationObserver(sync).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+  sync();
+})();
+</script>
 </body>
 </html>
+
